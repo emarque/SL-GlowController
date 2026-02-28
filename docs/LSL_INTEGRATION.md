@@ -49,10 +49,10 @@ data from the API and restores the original values.
 At the top of `GlowController.lsl`, set the base URL of your deployed API:
 
 ```lsl
-string API_BASE_URL = "http://YOUR_SERVER_IP:5000/api/glow";
+string API_BASE_URL = "https://your-domain.example.com/api/glow";
 ```
 
-Replace `YOUR_SERVER_IP` with the public IP or hostname of your server.
+Replace `your-domain.example.com` with your actual domain name.
 
 ---
 
@@ -110,7 +110,7 @@ Touch the object as the owner to print a status summary in local chat:
 ```
 GlowController v2.0 Status Check
   Object UUID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-  API URL: http://YOUR_SERVER_IP:5000/api/glow
+  API URL: https://your-domain.example.com/api/glow
   Linked prims: N (excluding root)
 ```
 
@@ -132,7 +132,7 @@ The script also listens on channel 0 for owner chat commands:
 
 1. **Touch the object** to confirm the script is running and see the UUID.
 2. Say `save glow` in local chat near the object to manually trigger a save.
-   Check the API: `curl http://YOUR_SERVER_IP:5000/api/glow/<uuid>`
+   Check the API: `curl https://your-domain.example.com/api/glow/<uuid>`
 3. Say `restore glow` to verify values are restored correctly.
 4. Check server logs if HTTP requests fail:
    `sudo journalctl -u glowpersistence-api -f`
