@@ -6,9 +6,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 
-// Entity Framework Core with PostgreSQL
+// Entity Framework Core with MySQL
 builder.Services.AddDbContext<GlowDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))));
 
 // CORS - enable for Second Life HTTP requests
 builder.Services.AddCors(options =>

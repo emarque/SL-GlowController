@@ -1,0 +1,39 @@
+# GlowController_Config.txt
+# Example _ScheduleCfg notecard for use with the ScheduledVisibility script
+# Copy the relevant lines into your _ScheduleCfg notecard.
+#
+# This configuration tells ScheduledVisibility to call GlowController
+# when showing or hiding the object.
+
+# ─────────────────────────────────────────────
+# Action mode 1 — delegate show/hide to a linked script
+# ─────────────────────────────────────────────
+actionMode=1
+
+# The name of the script that will receive link messages for show/hide
+actionScript=GlowController
+
+# Message sent to GlowController when the object should be shown
+# GlowController listens for "show" and calls restoreGlow()
+showFunction=show
+
+# Message sent to GlowController when the object should be hidden
+# GlowController listens for "hide" and calls saveAndDisableGlow()
+hideFunction=hide
+
+# ─────────────────────────────────────────────
+# Example schedule (adjust to your needs)
+# ─────────────────────────────────────────────
+# Show the object every day from 08:00 to 22:00 SLT
+scheduleStart=08:00
+scheduleEnd=22:00
+
+# ─────────────────────────────────────────────
+# Notes
+# ─────────────────────────────────────────────
+# 1. Drop both the ScheduledVisibility script and GlowController.lsl
+#    into the same object.
+# 2. Edit API_BASE_URL at the top of GlowController.lsl to point to
+#    your deployed API server.
+# 3. The GlowController script automatically skips the root prim and
+#    saves/restores glow on all child prims.
