@@ -21,7 +21,7 @@ echo ""
 # ─────────────────────────────────────────────
 # 1. Install .NET 8 SDK
 # ─────────────────────────────────────────────
-echo "[1/6] Installing .NET 8 SDK..."
+echo "[1/7] Installing .NET 8 SDK..."
 if ! command -v dotnet &>/dev/null; then
     # Use the Microsoft package feed
     wget -q https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb \
@@ -37,7 +37,7 @@ fi
 # ─────────────────────────────────────────────
 # 2. Install MySQL Server
 # ─────────────────────────────────────────────
-echo "[2/6] Installing MySQL Server..."
+echo "[2/7] Installing MySQL Server..."
 if ! command -v mysql &>/dev/null; then
     apt-get install -y mysql-server
     systemctl enable mysql
@@ -49,7 +49,7 @@ fi
 # ─────────────────────────────────────────────
 # 3. Provision MySQL database and user
 # ─────────────────────────────────────────────
-echo "[3/6] Provisioning MySQL database '${DB_NAME}' and user '${DB_USER}'..."
+echo "[3/7] Provisioning MySQL database '${DB_NAME}' and user '${DB_USER}'..."
 mysql --user=root <<EOF
 CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\`
     CHARACTER SET utf8mb4
@@ -67,7 +67,7 @@ echo "  Database provisioned."
 # ─────────────────────────────────────────────
 # 4. Build and publish the application
 # ─────────────────────────────────────────────
-echo "[4/6] Building and publishing application..."
+echo "[4/7] Building and publishing application..."
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="${SCRIPT_DIR}/../api/GlowPersistenceAPI"
 
@@ -106,7 +106,7 @@ echo "  Application published to ${APP_DIR}."
 # ─────────────────────────────────────────────
 # 5. Install systemd service
 # ─────────────────────────────────────────────
-echo "[5/6] Installing systemd service '${SERVICE_NAME}'..."
+echo "[5/7] Installing systemd service '${SERVICE_NAME}'..."
 cp "${SCRIPT_DIR}/glowpersistence-api.service" \
     "/etc/systemd/system/${SERVICE_NAME}.service"
 
