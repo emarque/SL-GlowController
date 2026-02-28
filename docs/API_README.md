@@ -154,23 +154,23 @@ first start, creating the `GlowRecords` table inside `glowpersistence`.
 sudo systemctl status glowpersistence-api
 
 # API health endpoint
-curl http://localhost:5000/health
+curl http://localhost:5005/health
 # → {"status":"Healthy","results":{"GlowDbContext":{"status":"Healthy",...}}}
 
 # API glow health endpoint
-curl http://localhost:5000/api/glow/health
+curl http://localhost:5005/api/glow/health
 # → {"status":"healthy","timestamp":"..."}
 
 # Save a test record (replace UUID with any valid UUID)
-curl -X POST http://localhost:5000/api/glow/550e8400-e29b-41d4-a716-446655440000 \
+curl -X POST http://localhost:5005/api/glow/550e8400-e29b-41d4-a716-446655440000 \
      -H "Content-Type: application/json" \
      -d '{"data":"4|6;0.5|0.3|0.0|0.1|0.0|0.0"}'
 
 # Retrieve it back
-curl http://localhost:5000/api/glow/550e8400-e29b-41d4-a716-446655440000
+curl http://localhost:5005/api/glow/550e8400-e29b-41d4-a716-446655440000
 
 # Delete it
-curl -X DELETE http://localhost:5000/api/glow/550e8400-e29b-41d4-a716-446655440000
+curl -X DELETE http://localhost:5005/api/glow/550e8400-e29b-41d4-a716-446655440000
 ```
 
 ---
@@ -274,7 +274,7 @@ Example combined: `4|6;0.5|0.0|0.0|0.0|0.3|0.1|0.0|0.0|0.0|0.0`
 ## Security Considerations
 
 - Change `DB_PASS` / the connection string password before deploying.
-- The API binds to `0.0.0.0:5000` by default. Place it behind a reverse proxy
+- The API binds to `0.0.0.0:5005` by default. Place it behind a reverse proxy
   (nginx/Caddy) with TLS if it will be reachable from the internet.
 - The application user `glowapi` is granted only the privileges it needs; avoid
   using the MySQL root account in the connection string.

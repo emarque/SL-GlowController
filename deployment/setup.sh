@@ -11,7 +11,7 @@ DB_USER="glowapi"
 DB_PASS="CHANGE_ME_STRONG_PASSWORD"   # ← change this
 APP_DIR="/opt/glowpersistenceapi"
 SERVICE_NAME="glowpersistence-api"
-APP_PORT="5000"
+APP_PORT="5005"
 
 echo "=== Glow Persistence API Setup ==="
 echo "Database : ${DB_NAME}"

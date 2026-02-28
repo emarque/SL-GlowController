@@ -51,7 +51,7 @@ instructions, including MySQL database provisioning.
 Open `scripts/GlowController.lsl` and set `API_BASE_URL` to your server:
 
 ```lsl
-string API_BASE_URL = "http://YOUR_SERVER_IP:5000/api/glow";
+string API_BASE_URL = "http://YOUR_SERVER_IP:5005/api/glow";
 ```
 
 ### 3 — Add scripts to your Second Life object
