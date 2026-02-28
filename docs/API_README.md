@@ -7,6 +7,9 @@
 | OS | Debian 12 or Ubuntu 22.04 LTS (other Linux distros work with minor adjustments) |
 | .NET SDK | 8.0 |
 | MySQL Server | 8.0+ |
+| nginx | any recent version (installed by setup script) |
+| certbot | any recent version (installed by setup script) |
+| Domain name | A public DNS A record pointing to your server (required for SSL) |
 | Access | `sudo` / root on the server |
 
 ---
@@ -19,15 +22,23 @@ Run the setup script from the repository root on your server:
 sudo bash deployment/setup.sh
 ```
 
+> **Before running:** edit the `DOMAIN` and `EMAIL` variables at the top of
+> `setup.sh` (in addition to `DB_PASS`). `DOMAIN` must resolve to your server's
+> public IP so that Let's Encrypt can issue the certificate.
+
 The script will:
 1. Install the .NET 8 SDK (if not present)
 2. Install MySQL Server (if not present)
 3. Create the database, user, and grant privileges
 4. Build and publish the application to `/opt/glowpersistenceapi`
 5. Install and start the `glowpersistence-api` systemd service
+6. Install nginx and deploy the reverse-proxy site config
+7. Install certbot and obtain a Let's Encrypt TLS certificate (HTTP → HTTPS redirect enabled)
+8. Restart the application service
 
-> **Security note:** Edit the `DB_PASS` variable at the top of `setup.sh`
-> before running it. Never use the default placeholder password in production.
+> **Security note:** Edit the `DB_PASS`, `DOMAIN`, and `EMAIL` variables at the
+> top of `setup.sh` before running it. Never use the default placeholder
+> password in production.
 
 ---
 
@@ -154,23 +165,23 @@ first start, creating the `GlowRecords` table inside `glowpersistence`.
 sudo systemctl status glowpersistence-api
 
 # API health endpoint
-curl http://localhost:5005/health
+curl https://your-domain.example.com/health
 # → {"status":"Healthy","results":{"GlowDbContext":{"status":"Healthy",...}}}
 
 # API glow health endpoint
-curl http://localhost:5005/api/glow/health
+curl https://your-domain.example.com/api/glow/health
 # → {"status":"healthy","timestamp":"..."}
 
 # Save a test record (replace UUID with any valid UUID)
-curl -X POST http://localhost:5005/api/glow/550e8400-e29b-41d4-a716-446655440000 \
+curl -X POST https://your-domain.example.com/api/glow/550e8400-e29b-41d4-a716-446655440000 \
      -H "Content-Type: application/json" \
      -d '{"data":"4|6;0.5|0.3|0.0|0.1|0.0|0.0"}'
 
 # Retrieve it back
-curl http://localhost:5005/api/glow/550e8400-e29b-41d4-a716-446655440000
+curl https://your-domain.example.com/api/glow/550e8400-e29b-41d4-a716-446655440000
 
 # Delete it
-curl -X DELETE http://localhost:5005/api/glow/550e8400-e29b-41d4-a716-446655440000
+curl -X DELETE https://your-domain.example.com/api/glow/550e8400-e29b-41d4-a716-446655440000
 ```
 
 ---
@@ -274,8 +285,11 @@ Example combined: `4|6;0.5|0.0|0.0|0.0|0.3|0.1|0.0|0.0|0.0|0.0`
 ## Security Considerations
 
 - Change `DB_PASS` / the connection string password before deploying.
-- The API binds to `0.0.0.0:5005` by default. Place it behind a reverse proxy
-  (nginx/Caddy) with TLS if it will be reachable from the internet.
+- The Kestrel app binds to `127.0.0.1:5005` and is only reachable via the nginx
+  reverse proxy. nginx terminates TLS on port 443 and certbot enforces
+  HTTP → HTTPS redirects.
+- TLS certificates are issued by Let's Encrypt and auto-renewed by certbot's
+  systemd timer.
 - The application user `glowapi` is granted only the privileges it needs; avoid
   using the MySQL root account in the connection string.
 - CORS is open (`AllowAnyOrigin`) because Second Life simulator IPs are not
