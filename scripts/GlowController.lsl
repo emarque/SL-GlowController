@@ -6,7 +6,7 @@
 // =====================================================================
 // CONFIGURATION
 // =====================================================================
-string API_BASE_URL = "https://your-api-server.example.com/api/glow";
+string API_BASE_URL = "https://psl.pantherplays.com/api/glow";
 
 // =====================================================================
 // GLOBAL VARIABLES
@@ -88,7 +88,7 @@ saveAndDisableGlow()
     while (link <= linkCount)
     {
         list primParams = llGetLinkPrimitiveParams(link, [PRIM_TYPE]);
-        integer faceCount = llGetNumberOfSides(link);
+        integer faceCount = llGetLinkNumberOfSides(link);
         faceCounts += [faceCount];
 
         integer face = 0;
@@ -185,9 +185,9 @@ restoreGlow()
 // =====================================================================
 
 // Extract a string value from a simple JSON object by key
-string extractJsonString(string json, string key)
+string extractJsonString(string json, string jkey)
 {
-    string search = "\"" + key + "\":\"";
+    string search = "\"" + jkey + "\":\"";
     integer start = llSubStringIndex(json, search);
     if (start == -1)
     {
